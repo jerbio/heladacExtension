@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { UserManager, WebStorageStateStore } from 'oidc-client';
 import { ApplicationPaths, ApplicationName } from './ApiAuthorizationConstants';
 
@@ -79,12 +80,15 @@ export class AuthorizeService {
     }
 
     async completeSignIn(url) {
+        console.log("we're in completeSignIn")
+        debugger
         try {
             await this.ensureUserManagerInitialized();
             const user = await this.userManager.signinCallback(url);
             this.updateState(user);
             return this.success(user && user.state);
         } catch (error) {
+            debugger
             console.log('There was an error signing in: ', error);
             return this.error('There was an error signing in.');
         }
@@ -179,12 +183,17 @@ export class AuthorizeService {
             return;
         }
 
-        let response = await fetch(ApplicationPaths.ApiAuthorizationClientConfigurationUrl);
+        debugger
+        let url = ApplicationPaths.RootPath+ ApplicationPaths.ApiAuthorizationClientConfigurationUrl
+        let response = await fetch(url);
+        debugger
         if (!response.ok) {
             throw new Error(`Could not load settings for '${ApplicationName}'`);
         }
-
+        debugger
         let settings = await response.json();
+        console.log("Settings result")
+        debugger
         settings.automaticSilentRenew = true;
         settings.includeIdTokenInSilentRenew = true;
         settings.userStore = new WebStorageStateStore({

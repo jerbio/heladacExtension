@@ -19,6 +19,7 @@ module.exports = {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
+    devtool: 'cheap-source-map',
     module: {
         rules: [
             {
@@ -43,6 +44,10 @@ module.exports = {
                 use: ['html-loader']
             }
         ]
+    },
+    optimization:{
+        minimize: false, // <---- disables uglify.
+        // minimizer: [new UglifyJsPlugin()] if you want to customize it.
     },
     plugins: [
         new HtmlWebpackPlugin({
