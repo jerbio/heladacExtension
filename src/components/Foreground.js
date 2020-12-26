@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import authService from '../authorization/AuthorizeService'
 import accountAuthorization from '../services/AccountAuthorization'
+import {ApplicationPaths} from '../authorization/ApiAuthorizationConstants'
 
  class Foreground extends Component {
     constructor(props) {
@@ -13,57 +14,20 @@ import accountAuthorization from '../services/AccountAuthorization'
     componentDidMount() {
         debugger
         this.state.accountAuthorization.getHeader().then((header) => {
-            // let header = { 'Authorization': `Bearer ${user.access_token}` }
             debugger
-            let url = 'https://localhost:44334/api/mail/usermails'
+            // let header = { 'Authorization': `Bearer ${user.access_token}` }
+            // debugger
+            // let url = ApplicationPaths.RootPath + '/api/mail/usermails'
             console.log(header)
-            let response = fetch(url,{
-                headers: header
-            }).then((response) => {
-                let retValue = response.json().then((processedMail) => {
-                    debugger
-                    console.log(processedMail)
-                })
-            })
+            // let response = fetch(url,{
+            //     headers: header
+            // }).then((response) => {
+            //     let retValue = response.json().then((processedMail) => {
+            //         debugger
+            //         console.log(processedMail)
+            //     })
+            // })
         });
-        // this.state.authService.ensureUserManagerInitialized().then(() => {
-        //     // let userManager = authService.userManager
-        //     this.state.authService.userManager
-        //     // .signinSilent((userCred) => {
-        //     //     debugger
-        //     // })
-        //     // .signinSilent(window.location.href)
-        //     // .signinPopupCallback(window.location.href)
-        //     // .signinRedirect()
-        //     .signinSilent()
-        //     .then((user) => {
-        //         debugger
-        //         console.log("LOG IN IS SUCCESSFUL")
-        //         let header = { 'Authorization': `Bearer ${user.access_token}` }
-        //         let url = 'https://localhost:44334/api/mail/usermails'
-        //         console.log(header)
-        //         let response = fetch(url,{
-        //             headers: header
-        //         }).then((response) => {
-        //             let retValue = response.json().then((processedMail) => {
-        //                 debugger
-        //                 console.log(processedMail)
-        //             })
-        //         })
-        //         debugger
-        //     })
-        //     .catch((userCred) =>{
-        //         debugger
-        //         this.state.authService.userManager.signinPopup()
-        //         .then((userCred) => {
-        //             debugger
-        //         })
-        //         .catch((errResponse) => {
-        //             debugger
-        //         })
-        //     })
-            
-        // })
         
     }
 

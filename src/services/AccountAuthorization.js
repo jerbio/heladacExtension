@@ -5,13 +5,20 @@ class AccountAuthorization {
         this.userCredentials = null
     }
 
-    isCredentialPresent() {
-        let retValue = (this.userCredentials || false) && true;
-        return retValue;
-    }
+    /**
+     * Function checks if credential has alread been set
+     */
+    isCredentialValid(credentials) {
+        debugger
+        let retValue = (credentials || false)
+        if(retValue) {
+            let expireTimeMs = credentials.expires_at*1000
+            let currentTime = Date.now()
+            retValue = currentTime < expireTimeMs
+        }
+        
 
-    isCredentialActive() {
-        return true
+        return retValue;
     }
 
     /**
@@ -19,20 +26,28 @@ class AccountAuthorization {
      * 
      */
     async readCredentials() {
-        await chrome.storage.sync.get(['login'], (result) => {
-            // debugger
-            console.log('Value currently is ' + result['login']);
-            this.userCredentials = result['login']
-          });
+        let retValue = new Promise((resolve, reject) => {
+            chrome.storage.sync.get(['loginAuthentication'], (result) => {
+                this.userCredentials = result['loginAuthentication']
+                resolve(this.userCredentials)
+              });
+        })
+        return retValue
     }
 
     async saveCredentials(signInCredentials) {
-        debugger
-        await chrome.storage.sync.set({'login': signInCredentials}, () => {
-            console.log('Value is set to ' + signInCredentials);
-          });
-          this.readCredentials()
-          
+        let retValue = new Promise((resolve, reject) => {
+            chrome.storage.sync.set({'loginAuthentication': signInCredentials}, 
+            () => {
+                console.log('Value is set to ' + signInCredentials);
+              });
+              this.readCredentials().then((credential) => {
+                  resolve(credential)
+              }).catch((err) => {
+                  reject(err)
+              })
+        })
+        return retValue          
     }
 
     /**
@@ -41,34 +56,42 @@ class AccountAuthorization {
      */
     async getHeader() {
         let retValue = new Promise((resolve, reject) => {
-            debugger
-            if(this.isCredentialPresent() && this.isCredentialActive()) {
-                 this.readCredentials().then((crdentialResult) => {
-                    let credentials = this.userCredentials
-                    let header = { 'Authorization': `Bearer ${credentials.access_token}` }
-                    resolve(header)
-                })
-                
-            } else {
+            this.readCredentials().then((credentialResult) => {
                 debugger
-                return this.signIn().then((signInSuccess) => {
+                if(credentialResult) {
+                    if(this.isCredentialValid(credentialResult)) {
+                        let credentials = this.userCredentials
+                        let header = { 'Authorization': `Bearer ${credentials.access_token}` }
+                        return resolve(header)
+                    }
+                }
+                //only get to the section if cannot authenticate user
+                this.signIn().then((signInSuccess) => {
                     debugger
-                    return this.getHeader().then((response) => {
-                        resolve(response)
-                    }).catch((err) => {
-                        reject(err)
-
+                    this.readCredentials().then((credentialResult) => {
+                        if(credentialResult) {
+                            if(this.isCredentialValid(credentialResult)) {
+                                let credentials = this.userCredentials
+                                let header = { 'Authorization': `Bearer ${credentials.access_token}` }
+                                return resolve(header)
+                            } else {
+                                reject({
+                                    reason: 'invalid credentials'
+                                })    
+                            }
+                        } else {
+                            reject({
+                                reason: 'credentials not found'
+                            })
+                        }
                     })
+                }).catch((err) => {
+                    reject(err)
                 })
-            }
+            })
         })
-        
 
         return retValue;
-    }
-
-    getLoggedInUser() {
-
     }
 
     async signIn() {
@@ -87,20 +110,7 @@ class AccountAuthorization {
             .signinSilent()
             .then((user) => {
                 debugger
-                thisAccountAuthorization.saveCredentials(user)
-                // console.log("LOG IN IS SUCCESSFUL")
-                // let header = { 'Authorization': `Bearer ${user.access_token}` }
-                // let url = 'https://localhost:44334/api/mail/usermails'
-                // console.log(header)
-                // let response = fetch(url,{
-                //     headers: header
-                // }).then((response) => {
-                //     let retValue = response.json().then((processedMail) => {
-                //         debugger
-                //         console.log(processedMail)
-                //     })
-                // })
-                debugger
+                return thisAccountAuthorization.saveCredentials(user)
             })
             .catch((userCred) =>{
                 debugger
