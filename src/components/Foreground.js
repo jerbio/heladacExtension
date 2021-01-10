@@ -33,7 +33,7 @@ import {ApplicationPaths} from '../authorization/ApiAuthorizationConstants'
 
     render() {
         let retValue = (<div style={styles.main}>
-            <h1>Chrome Ext - Foreground system comeback</h1>
+            {/* <h1>Chrome Ext - Foreground system comeback</h1> */}
         </div>)
         return retValue
     }
