@@ -19,7 +19,7 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "https://localhost:44334/",
+        "https://localhost:44358/",
         "storage"
     ] 
 }

@@ -36,11 +36,14 @@ class AccountAuthorization {
     }
 
     async saveCredentials(signInCredentials) {
+        debugger
         let retValue = new Promise((resolve, reject) => {
+            debugger
             chrome.storage.sync.set({'loginAuthentication': signInCredentials}, 
             () => {
                 console.log('Value is set to ' + signInCredentials);
               });
+              debugger
               this.readCredentials().then((credential) => {
                   resolve(credential)
               }).catch((err) => {
