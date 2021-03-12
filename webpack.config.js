@@ -8,7 +8,7 @@ module.exports = {
         contentBase: path.resolve(__dirname, './src'),
         historyApiFallback: true,
         writeToDisk: true,
-        port: 9001,
+        port: 9005,
         disableHostCheck: true
     },
     entry: {
