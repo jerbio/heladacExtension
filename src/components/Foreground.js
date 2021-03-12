@@ -12,21 +12,8 @@ import {ApplicationPaths} from '../authorization/ApiAuthorizationConstants'
     }
 
     componentDidMount() {
-        debugger
         this.state.accountAuthorization.getHeader().then((header) => {
-            debugger
-            // let header = { 'Authorization': `Bearer ${user.access_token}` }
-            // debugger
-            // let url = ApplicationPaths.RootPath + '/api/mail/usermails'
             console.log(header)
-            // let response = fetch(url,{
-            //     headers: header
-            // }).then((response) => {
-            //     let retValue = response.json().then((processedMail) => {
-            //         debugger
-            //         console.log(processedMail)
-            //     })
-            // })
         });
         
     }

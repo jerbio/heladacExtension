@@ -4,7 +4,6 @@ import Constants from '../Constants.js'
 class MailApi extends HeladacExtensionApi {
     async getMails (params) {
         let {pageCount = Constants.pageCount, pageIndex = 0} = params || {};
-        debugger
         let header = await this.getHeader();
         let url = this.rootUrl + '/api/mail/usermails'
         console.log(header)
@@ -12,7 +11,6 @@ class MailApi extends HeladacExtensionApi {
             headers: header
         }).then((response) => {
             let retValue = response.json().then((processedMail) => {
-                debugger
                 console.log(processedMail)
                 return processedMail;
             })

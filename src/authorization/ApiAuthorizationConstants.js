@@ -23,7 +23,7 @@ const prefix = '/authentication';
 
 export const ApplicationPaths = {
   DefaultLoginRedirectPath: '/',
-  RootPath: 'https://localhost:44334',
+  RootPath: 'https://localhost:44358',
   ApiAuthorizationClientConfigurationUrl: `/_configuration/${ApplicationName}`,
   ApiAuthorizationPrefix: prefix,
   Login: `${prefix}/${LoginActions.Login}`,

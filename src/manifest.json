@@ -1,5 +1,5 @@
 {
-    "name": "ReactJS Chrome Extension",
+    "name": "Heladac Chrome Extension",
     "description": "Using ReactJS to build a Chrome Extension",
     "version": "0.1.0",
     "manifest_version": 2,
@@ -19,7 +19,7 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "https://localhost:44334/",
+        "https://localhost:44358/",
         "storage"
     ] 
 }

@@ -30,7 +30,6 @@ class MailList extends Component {
           })
           this.state.api.mail.getMails()
             .then((response) => {
-              debugger
               this.setState({
                 dataLoad: {
                   status: Constants.loadStatus.finished,

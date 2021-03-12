@@ -8,7 +8,8 @@ module.exports = {
         contentBase: path.resolve(__dirname, './src'),
         historyApiFallback: true,
         writeToDisk: true,
-        port: 9001
+        port: 9001,
+        disableHostCheck: true
     },
     entry: {
         popup: path.resolve(__dirname, "./src/index-popup.js"),
@@ -45,6 +46,9 @@ module.exports = {
             }
         ]
     },
+    resolve: {
+        extensions: [".wasm", ".ts", ".tsx", ".mjs", ".cjs", ".js", ".json"],
+    },
     optimization:{
         minimize: false, // <---- disables uglify.
         // minimizer: [new UglifyJsPlugin()] if you want to customize it.
@@ -70,6 +74,7 @@ module.exports = {
                 { from: 'src/manifest.json', to: '[name].[ext]' },
                 { from: 'src/background.js', to: '[name].[ext]' },
                 { from: 'src/inject_script.js', to: '[name].[ext]' },
+                { from: 'src/background_inject.js', to: '[name].[ext]' },
                 { from: 'src/*.png', to: '[name].[ext]' }
             ]
         }),

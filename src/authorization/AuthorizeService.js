@@ -81,14 +81,12 @@ export class AuthorizeService {
 
     async completeSignIn(url) {
         console.log("we're in completeSignIn")
-        debugger
         try {
             await this.ensureUserManagerInitialized();
             const user = await this.userManager.signinCallback(url);
             this.updateState(user);
             return this.success(user && user.state);
         } catch (error) {
-            debugger
             console.log('There was an error signing in: ', error);
             return this.error('There was an error signing in.');
         }
@@ -179,21 +177,18 @@ export class AuthorizeService {
     }
 
     async ensureUserManagerInitialized() {
+        debugger
         if (this.userManager !== undefined) {
             return;
         }
 
-        debugger
         let url = ApplicationPaths.RootPath+ ApplicationPaths.ApiAuthorizationClientConfigurationUrl
         let response = await fetch(url);
-        debugger
         if (!response.ok) {
             throw new Error(`Could not load settings for '${ApplicationName}'`);
         }
-        debugger
         let settings = await response.json();
         console.log("Settings result")
-        debugger
         settings.automaticSilentRenew = true;
         settings.includeIdTokenInSilentRenew = true;
         settings.userStore = new WebStorageStateStore({
