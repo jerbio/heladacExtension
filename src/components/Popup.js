@@ -13,11 +13,9 @@ class Popup extends Component {
     }
 
     onClickCreateCredentials() {
-        debugger
         this.state.api.credential
             .createCredential().then((response) => {
                 console.log()
-                debugger
                 return response.json().then((data) => {
                     return data
                 })

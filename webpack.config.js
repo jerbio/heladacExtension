@@ -14,7 +14,8 @@ module.exports = {
     entry: {
         popup: path.resolve(__dirname, "./src/index-popup.js"),
         options: path.resolve(__dirname, "./src/index-options.js"),
-        foreground: path.resolve(__dirname, "./src/index-foreground.js")
+        foreground: path.resolve(__dirname, "./src/index-foreground.js"),
+        heladacPageManager: path.resolve(__dirname, "./src/PageManager.js")
     },
     output: {
         filename: '[name].bundle.js',
@@ -33,7 +34,7 @@ module.exports = {
                                 '@babel/preset-env',
                                 '@babel/preset-react',
                                 {
-                                    'plugins': ['@babel/plugin-proposal-class-properties']
+                                    'plugins': ['@babel/plugin-proposal-private-methods', '@babel/plugin-proposal-class-properties']
                                 }
                             ]
                         }
@@ -74,7 +75,6 @@ module.exports = {
                 { from: 'src/manifest.json', to: '[name].[ext]' },
                 { from: 'src/background.js', to: '[name].[ext]' },
                 { from: 'src/inject_script.js', to: '[name].[ext]' },
-                { from: 'src/background_inject.js', to: '[name].[ext]' },
                 { from: 'src/*.png', to: '[name].[ext]' }
             ]
         }),

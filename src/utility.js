@@ -41,6 +41,34 @@ class Utility {
     isFunction(arg) {
         return typeof arg === "function"
     }
+
+    getDomDrCreateNew(domId, type='div') {
+        let domObj = null;
+        let isNew = false;
+        if (domId) {
+            domObj = document.getElementById(domId);
+        }
+        
+        if (!domObj) {
+            isNew = true;
+            if (type !== 'svg') {
+                domObj= document.createElement (type);
+            } else {
+                domObj= document.createElementNS('http://www.w3.org/2000/svg', 'svg'); 
+            }
+        
+            if (domId) {
+                domObj.setAttribute('id', domId);
+            }
+        }
+
+        const retValue = {
+            dom: domObj,
+            isNew: isNew,
+        };
+
+        return retValue;
+    }
 }
 
 const utility = new Utility()
