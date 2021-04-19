@@ -28,9 +28,25 @@ class AccountAuthorization {
     async readCredentials() {
         let retValue = new Promise((resolve, reject) => {
             chrome.storage.sync.get(['loginAuthentication'], (result) => {
+                debugger
                 this.userCredentials = result['loginAuthentication']
                 resolve(this.userCredentials)
               });
+        })
+        return retValue
+    }
+
+    async clearCredentials() {
+        let retValue = new Promise((resolve, reject) => {
+            chrome.storage.sync.set({'loginAuthentication': null}, (result) => {
+                debugger
+                try{
+                    resolve(result)
+                } 
+                catch(err) {
+                    reject(err)
+                }
+              })
         })
         return retValue
     }
@@ -63,6 +79,8 @@ class AccountAuthorization {
                         let credentials = this.userCredentials
                         let header = { 'Authorization': `Bearer ${credentials.access_token}` }
                         return resolve(header)
+                    } else {
+                        this.clearCredentials()
                     }
                 }
                 //only get to the section if cannot authenticate user

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "eslint-config-airbnb": "^18.2.1",
+    "idempotent-babel-polyfill": "^7.4.4",
     "oidc-client": "^1.10.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

@@ -56,9 +56,10 @@ class Utility {
             } else {
                 domObj= document.createElementNS('http://www.w3.org/2000/svg', 'svg'); 
             }
-        
-            if (domId) {
-                domObj.setAttribute('id', domId);
+            
+            let domElementId = domId ? domId : this.generateUUID();
+            if (domElementId) {
+                domObj.setAttribute('id', domElementId);
             }
         }
 

@@ -22,11 +22,12 @@ class PageManager {
     }
 
     bindClickOfHeladacButton(heladacButton) {
-        heladacButton.addEventListener('click', renderHeladacDialog)
+        heladacButton.addEventListener('click', this.renderHeladacDialog.bind(this))
     }
 
-    renderHeladacDialog() {
-        this.heladacDialog.renderDialog(inputButton)
+    renderHeladacDialog(e) {
+        debugger
+        this.heladacDialog.renderDialog(e.target)
     }
 
     retrieveCredential() {
@@ -51,10 +52,31 @@ class PageManager {
  */
 class HeladacDialog {
     constructor(pageManager) {
-
+        this.UiDialogDom = utility.getDomDrCreateNew().dom
+        this.usernameInput = utility.getDomDrCreateNew('usernameInput'+utility.generateUUID(), 'input').dom
+        this.passwordInput = utility.getDomDrCreateNew('passwordInput'+utility.generateUUID(), 'input').dom
+        this.emailInput = utility.getDomDrCreateNew('emailInput'+utility.generateUUID(), 'input').dom
+        this.phoneNumberInput = utility.getDomDrCreateNew('phoneNumberInput'+utility.generateUUID(), 'input').dom
+        this.UiDialogDom.appendChild(this.usernameInput)
+        this.UiDialogDom.appendChild(this.passwordInput)
+        this.UiDialogDom.appendChild(this.emailInput)
     }
 
+
+
     renderDialog(inputButton) {
+        debugger
+        if(inputButton) {
+            let bodyRect = document.body.getBoundingClientRect();
+            let inputRect = inputButton.getBoundingClientRect();
+            let topOffset = inputRect.top - bodyRect.top
+            let leftOffset = inputRect.left - bodyRect.left
+            this.UiDialogDom.style.top = topOffset+'px'
+            this.UiDialogDom.style.left = leftOffset+'px'
+            this.UiDialogDom.style.position = 'absolute'
+
+            document.body.appendChild(this.UiDialogDom)
+        }
 
     }
 }

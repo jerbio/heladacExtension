@@ -32,9 +32,25 @@ class AccountAuthorization {
     async readCredentials() {
         let retValue = new Promise((resolve, reject) => {
             chrome.storage.sync.get(['loginAuthentication'], (result) => {
+                debugger
                 this.userCredentials = result['loginAuthentication']
                 resolve(this.userCredentials)
               });
+        })
+        return retValue
+    }
+
+    async clearCredentials() {
+        let retValue = new Promise((resolve, reject) => {
+            chrome.storage.clear((result) => {
+                debugger
+                try{
+                    resolve(result)
+                } 
+                catch(err) {
+                    reject(err)
+                }
+              })
         })
         return retValue
     }
@@ -195,10 +211,7 @@ class AccountAuthorization {
                         })
                     })
                 })
-                
-                
             })
-            
         })
     }
 }
