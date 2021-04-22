@@ -75,6 +75,7 @@ module.exports = {
                 { from: 'src/manifest.json', to: '[name].[ext]' },
                 { from: 'src/background.js', to: '[name].[ext]' },
                 { from: 'src/inject_script.js', to: '[name].[ext]' },
+                { from: 'src/main.css', to: 'main.css' },
                 { from: 'src/*.png', to: '[name].[ext]' }
             ]
         }),

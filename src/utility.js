@@ -57,7 +57,7 @@ class Utility {
                 domObj= document.createElementNS('http://www.w3.org/2000/svg', 'svg'); 
             }
             
-            let domElementId = domId ? domId : this.generateUUID();
+            let domElementId = domId ? domId : 'heladac-dom-' + this.generateUUID();
             if (domElementId) {
                 domObj.setAttribute('id', domElementId);
             }

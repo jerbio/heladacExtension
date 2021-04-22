@@ -52,14 +52,31 @@ class PageManager {
  */
 class HeladacDialog {
     constructor(pageManager) {
-        this.UiDialogDom = utility.getDomDrCreateNew().dom
+        this.UiDialogDom = utility.getDomDrCreateNew('heladacDialog').dom
+        this.initialize()
+    }
+
+
+    initialize() {
         this.usernameInput = utility.getDomDrCreateNew('usernameInput'+utility.generateUUID(), 'input').dom
+        let usernameContainer = utility.getDomDrCreateNew('usernameContainer'+utility.generateUUID()).dom
+        usernameContainer.appendChild(this.usernameInput)
         this.passwordInput = utility.getDomDrCreateNew('passwordInput'+utility.generateUUID(), 'input').dom
+        let passwordContainer = utility.getDomDrCreateNew('passwordInputContainer'+utility.generateUUID()).dom
+        passwordContainer.appendChild(this.passwordInput)
         this.emailInput = utility.getDomDrCreateNew('emailInput'+utility.generateUUID(), 'input').dom
+        let emailContainer = utility.getDomDrCreateNew('emailContainer'+utility.generateUUID()).dom
+        emailContainer.appendChild(this.emailInput)
         this.phoneNumberInput = utility.getDomDrCreateNew('phoneNumberInput'+utility.generateUUID(), 'input').dom
-        this.UiDialogDom.appendChild(this.usernameInput)
-        this.UiDialogDom.appendChild(this.passwordInput)
-        this.UiDialogDom.appendChild(this.emailInput)
+        this.saveButton = utility.getDomDrCreateNew('saveButton'+utility.generateUUID(), 'button').dom
+        this.saveButton.innerHTML = 'Save'
+        let saveButtonContainer = utility.getDomDrCreateNew('saveButtonContainer'+utility.generateUUID()).dom
+        saveButtonContainer.appendChild(this.saveButton)
+        this.UiDialogDom.appendChild(usernameContainer)
+        this.UiDialogDom.appendChild(emailContainer)
+        this.UiDialogDom.appendChild(passwordContainer)
+        this.UiDialogDom.appendChild(saveButtonContainer)
+        
     }
 
 
