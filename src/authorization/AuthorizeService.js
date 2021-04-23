@@ -177,7 +177,7 @@ export class AuthorizeService {
     }
 
     async ensureUserManagerInitialized() {
-        debugger
+        
         if (this.userManager !== undefined) {
             return;
         }

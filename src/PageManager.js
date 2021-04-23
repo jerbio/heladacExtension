@@ -26,7 +26,7 @@ class PageManager {
     }
 
     renderHeladacDialog(e) {
-        debugger
+        
         this.heladacDialog.renderDialog(e.target)
     }
 
@@ -53,36 +53,64 @@ class PageManager {
 class HeladacDialog {
     constructor(pageManager) {
         this.UiDialogDom = utility.getDomDrCreateNew('heladacDialog').dom
+        this.credentialApi = new CredentialApi();
         this.initialize()
     }
 
 
+    bindCredentials() {
+        if(this.newCredentialButton){
+            this.newCredentialButton.addEventListener('click', () => { 
+                debugger
+                this.credentialApi.createCredential().then((data) => {
+                    debugger
+                    console.log(data)
+                })
+            })
+        }
+    }
+
     initialize() {
         this.usernameInput = utility.getDomDrCreateNew('usernameInput'+utility.generateUUID(), 'input').dom
+        this.usernameInput.setAttribute('placeholder', 'username')
         let usernameContainer = utility.getDomDrCreateNew('usernameContainer'+utility.generateUUID()).dom
         usernameContainer.appendChild(this.usernameInput)
         this.passwordInput = utility.getDomDrCreateNew('passwordInput'+utility.generateUUID(), 'input').dom
+        this.passwordInput.setAttribute('placeholder', 'password')
         let passwordContainer = utility.getDomDrCreateNew('passwordInputContainer'+utility.generateUUID()).dom
         passwordContainer.appendChild(this.passwordInput)
         this.emailInput = utility.getDomDrCreateNew('emailInput'+utility.generateUUID(), 'input').dom
         let emailContainer = utility.getDomDrCreateNew('emailContainer'+utility.generateUUID()).dom
+        this.emailInput.setAttribute('placeholder', 'email')
         emailContainer.appendChild(this.emailInput)
         this.phoneNumberInput = utility.getDomDrCreateNew('phoneNumberInput'+utility.generateUUID(), 'input').dom
         this.saveButton = utility.getDomDrCreateNew('saveButton'+utility.generateUUID(), 'button').dom
         this.saveButton.innerHTML = 'Save'
         let saveButtonContainer = utility.getDomDrCreateNew('saveButtonContainer'+utility.generateUUID()).dom
         saveButtonContainer.appendChild(this.saveButton)
+
+        this.newCredentialButton = utility.getDomDrCreateNew('generateCredential'+utility.generateUUID(), 'button').dom
+        this.newCredentialButton.innerHTML = 'New Credentials'
+        
+        this.credentialApi.getServiceCredential().then((data) => {
+            debugger
+        })
+        let newCredentialButtonContainer = utility.getDomDrCreateNew('generateCredentialContainer'+utility.generateUUID()).dom
+        newCredentialButtonContainer.appendChild(this.newCredentialButton)
+
+
         this.UiDialogDom.appendChild(usernameContainer)
         this.UiDialogDom.appendChild(emailContainer)
         this.UiDialogDom.appendChild(passwordContainer)
         this.UiDialogDom.appendChild(saveButtonContainer)
+        this.UiDialogDom.appendChild(newCredentialButtonContainer)
         
     }
 
 
 
     renderDialog(inputButton) {
-        debugger
+        
         if(inputButton) {
             let bodyRect = document.body.getBoundingClientRect();
             let inputRect = inputButton.getBoundingClientRect();
@@ -93,6 +121,7 @@ class HeladacDialog {
             this.UiDialogDom.style.position = 'absolute'
 
             document.body.appendChild(this.UiDialogDom)
+            this.bindCredentials()
         }
 
     }
@@ -137,7 +166,7 @@ class InputFieldManager {
 
 
     positionHeladacButton() {
-        debugger
+        
         let parentNode = this.inputDom.parentNode
         parentNode.appendChild(this.heladacButton.heladacDom)
     }
@@ -195,12 +224,12 @@ function isCredentialPageDetected(emailInputDoms, passwordDoms) {
 
 
 function main() {
-    debugger
+    
     let usernameInputs =  document.querySelectorAll('input[type="username"]');
     if(usernameInputs.length < 1) {
         usernameInputs =  document.querySelectorAll('input[type="userName"]');
     }
-    debugger
+    
     let emailInputs =  document.querySelectorAll('input[type="email"]');
     let passwordInputs =  document.querySelectorAll('input[type="password"]');
     let nameInputs =  document.querySelectorAll('input[type="password"]');
@@ -215,7 +244,7 @@ main()
 
 
 
-debugger
+
 
 console.log('Background injected back again');
 

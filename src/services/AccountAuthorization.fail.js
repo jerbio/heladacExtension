@@ -32,7 +32,7 @@ class AccountAuthorization {
     async readCredentials() {
         let retValue = new Promise((resolve, reject) => {
             chrome.storage.sync.get(['loginAuthentication'], (result) => {
-                debugger
+                
                 this.userCredentials = result['loginAuthentication']
                 resolve(this.userCredentials)
               });
@@ -43,7 +43,7 @@ class AccountAuthorization {
     async clearCredentials() {
         let retValue = new Promise((resolve, reject) => {
             chrome.storage.clear((result) => {
-                debugger
+                
                 try{
                     resolve(result)
                 } 
@@ -80,7 +80,7 @@ class AccountAuthorization {
                     heladacChromeStore.heladacDataTransfer.oidcStoreTransfer.isUserFound &&
                     heladacChromeStore.heladacDataTransfer.oidcStoreTransfer.callBackId ) {
                         let callBackFunction = utility.getSubscription(heladacChromeStore.heladacDataTransfer.oidcStoreTransfer.callBackId )
-                        debugger;
+                        ;
                         callBackFunction()
                 }
         }, false);
@@ -129,7 +129,7 @@ class AccountAuthorization {
     }
 
     async manageNewChromeCredentialLogIn() {
-        debugger
+        
 
         let retValue = new Promise((resolve, reject) => {
             try{
@@ -163,7 +163,7 @@ class AccountAuthorization {
                         windowForPost.postMessage(data, ApplicationPaths.RootPath)
                         // windowForPost.postMessage(data, '*')
                         setTimeout(() => {
-                            debugger
+                            
                             resolve(data)},
                             10000)
                     }
@@ -188,23 +188,23 @@ class AccountAuthorization {
             return authService.userManager
             .signinSilent()
             .then((user) => {
-                debugger
+                
                 return thisAccountAuthorization.saveCredentials(user)
             })
             .catch((err) =>{
-                debugger
+                
                 console.error(err)
                 return authService.userManager.clearStaleState().then(() => {
                     return authService.ensureUserManagerInitialized().then(() => {
-                        debugger
+                        
                         return this.manageNewChromeCredentialLogIn().then((chromeStoreData) => {
-                            debugger
+                            
                             return authService.userManager.signinPopup().then((user) => {
-                                debugger
+                                
                                 return thisAccountAuthorization.saveCredentials(user)
                             })
                             .catch((err) =>{
-                                debugger
+                                
                                 console.error(err)
                                 return authService.userManager.signinPopup();
                             })

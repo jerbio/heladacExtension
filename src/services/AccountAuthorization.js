@@ -9,7 +9,7 @@ class AccountAuthorization {
      * Function checks if credential has alread been set
      */
     isCredentialValid(credentials) {
-        debugger
+        
         let retValue = (credentials || false)
         if(retValue) {
             let expireTimeMs = credentials.expires_at*1000
@@ -28,7 +28,7 @@ class AccountAuthorization {
     async readCredentials() {
         let retValue = new Promise((resolve, reject) => {
             chrome.storage.sync.get(['loginAuthentication'], (result) => {
-                debugger
+                
                 this.userCredentials = result['loginAuthentication']
                 resolve(this.userCredentials)
               });
@@ -39,7 +39,7 @@ class AccountAuthorization {
     async clearCredentials() {
         let retValue = new Promise((resolve, reject) => {
             chrome.storage.sync.set({'loginAuthentication': null}, (result) => {
-                debugger
+                
                 try{
                     resolve(result)
                 } 
@@ -73,7 +73,7 @@ class AccountAuthorization {
     async getHeader() {
         let retValue = new Promise((resolve, reject) => {
             this.readCredentials().then((credentialResult) => {
-                debugger
+                
                 if(credentialResult) {
                     if(this.isCredentialValid(credentialResult)) {
                         let credentials = this.userCredentials
@@ -85,7 +85,7 @@ class AccountAuthorization {
                 }
                 //only get to the section if cannot authenticate user
                 this.signIn().then((signInSuccess) => {
-                    debugger
+                    
                     this.readCredentials().then((credentialResult) => {
                         if(credentialResult) {
                             if(this.isCredentialValid(credentialResult)) {
@@ -114,30 +114,30 @@ class AccountAuthorization {
 
     async signIn() {
         let thisAccountAuthorization = this;
-        debugger
+        
         return authService.ensureUserManagerInitialized().then(() => {
             // let userManager = authService.userManager
-            debugger
+            
             return authService.userManager
             // .signinSilent((userCred) => {
-            //     debugger
+            //     
             // })
             // .signinSilent(window.location.href)
             // .signinPopupCallback(window.location.href)
             // .signinRedirect()
             .signinSilent()
             .then((user) => {
-                debugger
+                
                 return thisAccountAuthorization.saveCredentials(user)
             })
             .catch((userCred) =>{
-                debugger
+                
                 return authService.userManager.signinPopup()
                 .then((userCred) => {
-                    debugger
+                    
                 })
                 .catch((errResponse) => {
-                    debugger
+                    
                 })
             })
             
