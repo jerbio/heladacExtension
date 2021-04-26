@@ -4,10 +4,11 @@ import {
     Switch,
     Route,
     Link,
-    Redirect
-} from "react-router-dom";
-import Popup from './Popup.js';
-import Foreground from './Foreground.js';
+    Redirect,
+} from 'react-router-dom';
+import Popup from './Popup';
+import Foreground from './Foreground';
+
 function Options() {
     return (
         <Router>
@@ -41,14 +42,14 @@ function Options() {
                 </Switch>
             </div>
         </Router>
-    )
+    );
 }
 const styles = {
     container: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
-    }
-}
+        alignItems: 'center',
+    },
+};
 export default Options;

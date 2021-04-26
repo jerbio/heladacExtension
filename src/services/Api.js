@@ -1,14 +1,15 @@
-import {ApplicationPaths} from '../authorization/ApiAuthorizationConstants'
-import accountAuthorization from '../services/AccountAuthorization'
+import { ApplicationPaths } from '../authorization/ApiAuthorizationConstants';
+import accountAuthorization from './AccountAuthorization';
 
 class HeladacExtensionApi {
     constructor() {
         this.rootUrl = ApplicationPaths.RootPath;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     async getHeader() {
-        let header = await accountAuthorization.getHeader();
-        return header
+        const header = await accountAuthorization.getHeader();
+        return header;
     }
 }
 
