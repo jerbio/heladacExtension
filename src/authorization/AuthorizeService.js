@@ -1,6 +1,14 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
 import 'babel-polyfill';
 import { UserManager, WebStorageStateStore } from 'oidc-client';
 import { ApplicationPaths, ApplicationName } from './ApiAuthorizationConstants';
+
+export const AuthenticationResultStatus = {
+    Redirect: 'redirect',
+    Success: 'success',
+    Fail: 'fail',
+};
 
 export class AuthorizeService {
     _callbacks = [];
@@ -147,7 +155,8 @@ export class AuthorizeService {
 
     unsubscribe(subscriptionId) {
         const subscriptionIndex = this._callbacks
-            .map((element, index) => (element.subscription === subscriptionId ? { found: true, index } : { found: false }))
+            .map((element, index) => (element.subscription === subscriptionId
+                ? { found: true, index } : { found: false }))
             .filter((element) => element.found === true);
         if (subscriptionIndex.length !== 1) {
             throw new Error(`Found an invalid number of subscriptions ${subscriptionIndex.length}`);
@@ -163,29 +172,33 @@ export class AuthorizeService {
         }
     }
 
+    // eslint-disable-next-line class-methods-use-this
     createArguments(state) {
         return { useReplaceToNavigate: true, data: state };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     error(message) {
         return { status: AuthenticationResultStatus.Fail, message };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     success(state) {
         return { status: AuthenticationResultStatus.Success, state };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     redirect() {
         return { status: AuthenticationResultStatus.Redirect };
     }
 
     async ensureUserManagerInitialized() {
-        debugger;
         if (this.userManager !== undefined) {
             return;
         }
 
-        const url = ApplicationPaths.RootPath + ApplicationPaths.ApiAuthorizationClientConfigurationUrl;
+        const url = ApplicationPaths.RootPath
+            + ApplicationPaths.ApiAuthorizationClientConfigurationUrl;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Could not load settings for '${ApplicationName}'`);
@@ -206,15 +219,10 @@ export class AuthorizeService {
         });
     }
 
+    // eslint-disable-next-line no-use-before-define
     static get instance() { return authService; }
 }
 
 const authService = new AuthorizeService();
 
 export default authService;
-
-export const AuthenticationResultStatus = {
-    Redirect: 'redirect',
-    Success: 'success',
-    Fail: 'fail',
-};
