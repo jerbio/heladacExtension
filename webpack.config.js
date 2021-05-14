@@ -12,9 +12,9 @@ module.exports = {
         disableHostCheck: true
     },
     entry: {
-        popup: path.resolve(__dirname, "./src/index-popup.js"),
-        options: path.resolve(__dirname, "./src/index-options.js"),
-        foreground: path.resolve(__dirname, "./src/index-foreground.js"),
+        popup: path.resolve(__dirname, "./src/index-popup.jsx"),
+        options: path.resolve(__dirname, "./src/index-options.jsx"),
+        foreground: path.resolve(__dirname, "./src/index-foreground.jsx"),
         heladacPageManager: path.resolve(__dirname, "./src/PageManager.js")
     },
     output: {
@@ -25,7 +25,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 use: [
                     {
                         loader: 'babel-loader',
@@ -48,7 +48,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".wasm", ".ts", ".tsx", ".mjs", ".cjs", ".js", ".json"],
+        extensions: [".wasm", ".ts", ".tsx", ".mjs", ".cjs", ".js", ".json", ".jsx"],
     },
     optimization:{
         minimize: false, // <---- disables uglify.

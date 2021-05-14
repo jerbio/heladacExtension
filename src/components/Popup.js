@@ -1,6 +1,6 @@
 import { extend } from 'lodash';
 import React, { Component } from 'react';
-import MailPage from '../pages/MailPage.js'
+import MailPage from '../pages/MailPage'
 import CredentialApi from '../services/CredentialApi.js';
 class Popup extends Component {
     constructor(props) {
