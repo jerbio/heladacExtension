@@ -1,22 +1,30 @@
-import HeladacExtensionApi from './Api.js'
-import Constants from '../Constants.js'
+import HeladacExtensionApi from './Api';
+import Constants from '../Constants';
 
 class MailApi extends HeladacExtensionApi {
-    async getMails (params) {
-        let {pageCount = Constants.pageCount, pageIndex = 0} = params || {};
-        let header = await this.getHeader();
-        let url = this.rootUrl + '/api/mail/usermails'
-        console.log(header)
-        let retValue = fetch(url,{
-            headers: header
-        }).then((response) => {
-            let retValue = response.json().then((processedMail) => {
-                console.log(processedMail)
-                return processedMail;
-            })
+    async getMails(params) {
+        const { pageCount = Constants.pageCount, pageIndex = 0 } = params || {};
+        const header = await this.getHeader();
+        const url = `${this.rootUrl}/api/mail/usermails`;
+        const getParams = { pageCount, pageIndex };
 
-            return retValue
-        })
+        let requestUrl = url;
+
+        const query = Object.keys(getParams)
+            .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(getParams[k])}`)
+            .join('&');
+
+        requestUrl = `${requestUrl}?${query}`;
+        const retValue = fetch(requestUrl, {
+            headers: header,
+        }).then((response) => {
+            const mailResults = response.json().then((processedMail) => {
+                console.log(processedMail);
+                return processedMail;
+            });
+
+            return mailResults;
+        });
 
         return retValue;
     }

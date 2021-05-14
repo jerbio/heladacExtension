@@ -1,10 +1,9 @@
-
-const foreground_entry_point = document.createElement('div');
-let reactJS_script = document.createElement('script');
+const foregroundEntryPoint = document.createElement('div');
+const reactJSScript = document.createElement('script');
 
 console.log('WE back again');
 
-foreground_entry_point.id = 'foreground';
+foregroundEntryPoint.id = 'foreground';
 
-foreground_entry_point.appendChild(reactJS_script);
-document.querySelector("body").appendChild(foreground_entry_point);
+foregroundEntryPoint.appendChild(reactJSScript);
+document.querySelector('body').appendChild(foregroundEntryPoint);

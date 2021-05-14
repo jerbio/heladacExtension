@@ -1,11 +1,22 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
 import 'babel-polyfill';
 import { UserManager, WebStorageStateStore } from 'oidc-client';
 import { ApplicationPaths, ApplicationName } from './ApiAuthorizationConstants';
 
+export const AuthenticationResultStatus = {
+    Redirect: 'redirect',
+    Success: 'success',
+    Fail: 'fail',
+};
+
 export class AuthorizeService {
     _callbacks = [];
+
     _nextSubscriptionId = 0;
+
     _user = null;
+
     _isAuthenticated = false;
 
     // By default pop ups are disabled because they don't work properly on Edge.
@@ -49,22 +60,22 @@ export class AuthorizeService {
             return this.success(state);
         } catch (silentError) {
             // User might not be authenticated, fallback to popup authentication
-            console.log("Silent authentication error: ", silentError);
+            console.log('Silent authentication error: ', silentError);
 
             try {
                 if (this._popUpDisabled) {
-                    throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.')
+                    throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.');
                 }
 
                 const popUpUser = await this.userManager.signinPopup(this.createArguments());
                 this.updateState(popUpUser);
                 return this.success(state);
             } catch (popUpError) {
-                if (popUpError.message === "Popup window closed") {
+                if (popUpError.message === 'Popup window closed') {
                     // The user explicitly cancelled the login action by closing an opened popup.
-                    return this.error("The user closed the window.");
-                } else if (!this._popUpDisabled) {
-                    console.log("Popup authentication error: ", popUpError);
+                    return this.error('The user closed the window.');
+                } if (!this._popUpDisabled) {
+                    console.log('Popup authentication error: ', popUpError);
                 }
 
                 // PopUps might be blocked by the user, fallback to redirect
@@ -72,7 +83,7 @@ export class AuthorizeService {
                     await this.userManager.signinRedirect(this.createArguments(state));
                     return this.redirect();
                 } catch (redirectError) {
-                    console.log("Redirect authentication error: ", redirectError);
+                    console.log('Redirect authentication error: ', redirectError);
                     return this.error(redirectError);
                 }
             }
@@ -80,7 +91,7 @@ export class AuthorizeService {
     }
 
     async completeSignIn(url) {
-        console.log("we're in completeSignIn")
+        console.log("we're in completeSignIn");
         try {
             await this.ensureUserManagerInitialized();
             const user = await this.userManager.signinCallback(url);
@@ -101,19 +112,19 @@ export class AuthorizeService {
         await this.ensureUserManagerInitialized();
         try {
             if (this._popUpDisabled) {
-                throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.')
+                throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.');
             }
 
             await this.userManager.signoutPopup(this.createArguments());
             this.updateState(undefined);
             return this.success(state);
         } catch (popupSignOutError) {
-            console.log("Popup signout error: ", popupSignOutError);
+            console.log('Popup signout error: ', popupSignOutError);
             try {
                 await this.userManager.signoutRedirect(this.createArguments(state));
                 return this.redirect();
             } catch (redirectSignOutError) {
-                console.log("Redirect signout error: ", redirectSignOutError);
+                console.log('Redirect signout error: ', redirectSignOutError);
                 return this.error(redirectSignOutError);
             }
         }
@@ -144,8 +155,9 @@ export class AuthorizeService {
 
     unsubscribe(subscriptionId) {
         const subscriptionIndex = this._callbacks
-            .map((element, index) => element.subscription === subscriptionId ? { found: true, index } : { found: false })
-            .filter(element => element.found === true);
+            .map((element, index) => (element.subscription === subscriptionId
+                ? { found: true, index } : { found: false }))
+            .filter((element) => element.found === true);
         if (subscriptionIndex.length !== 1) {
             throw new Error(`Found an invalid number of subscriptions ${subscriptionIndex.length}`);
         }
@@ -155,44 +167,48 @@ export class AuthorizeService {
 
     notifySubscribers() {
         for (let i = 0; i < this._callbacks.length; i++) {
-            const callback = this._callbacks[i].callback;
+            const { callback } = this._callbacks[i];
             callback();
         }
     }
 
+    // eslint-disable-next-line class-methods-use-this
     createArguments(state) {
         return { useReplaceToNavigate: true, data: state };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     error(message) {
         return { status: AuthenticationResultStatus.Fail, message };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     success(state) {
         return { status: AuthenticationResultStatus.Success, state };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     redirect() {
         return { status: AuthenticationResultStatus.Redirect };
     }
 
     async ensureUserManagerInitialized() {
-        debugger
         if (this.userManager !== undefined) {
             return;
         }
 
-        let url = ApplicationPaths.RootPath+ ApplicationPaths.ApiAuthorizationClientConfigurationUrl
-        let response = await fetch(url);
+        const url = ApplicationPaths.RootPath
+            + ApplicationPaths.ApiAuthorizationClientConfigurationUrl;
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Could not load settings for '${ApplicationName}'`);
         }
-        let settings = await response.json();
-        console.log("Settings result")
+        const settings = await response.json();
+        console.log('Settings result');
         settings.automaticSilentRenew = true;
         settings.includeIdTokenInSilentRenew = true;
         settings.userStore = new WebStorageStateStore({
-            prefix: ApplicationName
+            prefix: ApplicationName,
         });
 
         this.userManager = new UserManager(settings);
@@ -203,15 +219,10 @@ export class AuthorizeService {
         });
     }
 
-    static get instance() { return authService }
+    // eslint-disable-next-line no-use-before-define
+    static get instance() { return authService; }
 }
 
 const authService = new AuthorizeService();
 
 export default authService;
-
-export const AuthenticationResultStatus = {
-    Redirect: 'redirect',
-    Success: 'success',
-    Fail: 'fail'
-};

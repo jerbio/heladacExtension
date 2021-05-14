@@ -1,53 +1,58 @@
-import authService from '../authorization/AuthorizeService'
+import authService from '../authorization/AuthorizeService';
 
 class AccountAuthorization {
     constructor() {
-        this.userCredentials = null
+        this.userCredentials = null;
     }
 
     /**
      * Function checks if credential has alread been set
      */
+    // eslint-disable-next-line class-methods-use-this
     isCredentialValid(credentials) {
-        debugger
-        let retValue = (credentials || false)
-        if(retValue) {
-            let expireTimeMs = credentials.expires_at*1000
-            let currentTime = Date.now()
-            retValue = currentTime < expireTimeMs
+        let retValue = (credentials || false);
+        if (retValue) {
+            const expireTimeMs = credentials.expires_at * 1000;
+            const currentTime = Date.now();
+            retValue = currentTime < expireTimeMs;
         }
-        
 
         return retValue;
     }
 
     /**
-     * function rtrieves the credentials of the current user
-     * 
+     * function retrieves the credentials of the current user
+     *
      */
     async readCredentials() {
-        let retValue = new Promise((resolve, reject) => {
+        const retValue = new Promise((resolve) => {
             chrome.storage.sync.get(['loginAuthentication'], (result) => {
-                this.userCredentials = result['loginAuthentication']
-                resolve(this.userCredentials)
-              });
-        })
-        return retValue
+                this.userCredentials = result.loginAuthentication;
+                resolve(this.userCredentials);
+            });
+        });
+        return retValue;
     }
 
+    /**
+     * Function persists the provided credentials to the chrome storage
+     * @param {*} signInCredentials crede
+     * @returns {Promise} then returns the credentials persisted, and
+     * catch gets returned if we cannot verify the persisting of the credentials.
+     */
     async saveCredentials(signInCredentials) {
-        let retValue = new Promise((resolve, reject) => {
-            chrome.storage.sync.set({'loginAuthentication': signInCredentials}, 
-            () => {
-                console.log('Value is set to ' + signInCredentials);
-              });
-              this.readCredentials().then((credential) => {
-                  resolve(credential)
-              }).catch((err) => {
-                  reject(err)
-              })
-        })
-        return retValue          
+        const retValue = new Promise((resolve, reject) => {
+            chrome.storage.sync.set({ loginAuthentication: signInCredentials },
+                () => {
+                    console.log(`Value is set to ${signInCredentials}`);
+                });
+            this.readCredentials().then((credential) => {
+                resolve(credential);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+        return retValue;
     }
 
     /**
@@ -55,76 +60,50 @@ class AccountAuthorization {
      * @return {Promise}
      */
     async getHeader() {
-        let retValue = new Promise((resolve, reject) => {
+        const retValue = new Promise((resolve, reject) => {
             this.readCredentials().then((credentialResult) => {
-                debugger
-                if(credentialResult) {
-                    if(this.isCredentialValid(credentialResult)) {
-                        let credentials = this.userCredentials
-                        let header = { 'Authorization': `Bearer ${credentials.access_token}` }
-                        return resolve(header)
+                if (credentialResult) {
+                    if (this.isCredentialValid(credentialResult)) {
+                        const credentials = this.userCredentials;
+                        const header = { Authorization: `Bearer ${credentials.access_token}` };
+                        return resolve(header);
                     }
                 }
-                //only get to the section if cannot authenticate user
-                this.signIn().then((signInSuccess) => {
-                    debugger
+                // only get to the section if cannot authenticate user
+                return this.signIn().then(() => {
+                    // eslint-disable-next-line no-shadow
                     this.readCredentials().then((credentialResult) => {
-                        if(credentialResult) {
-                            if(this.isCredentialValid(credentialResult)) {
-                                let credentials = this.userCredentials
-                                let header = { 'Authorization': `Bearer ${credentials.access_token}` }
-                                return resolve(header)
-                            } else {
-                                reject({
-                                    reason: 'invalid credentials'
-                                })    
+                        if (credentialResult) {
+                            if (this.isCredentialValid(credentialResult)) {
+                                const credentials = this.userCredentials;
+                                const header = { Authorization: `Bearer ${credentials.access_token}` };
+                                return resolve(header);
                             }
-                        } else {
-                            reject({
-                                reason: 'credentials not found'
-                            })
+                            return reject(Error('invalid credentials'));
                         }
-                    })
+                        return reject(Error('credentials not found'));
+                    });
                 }).catch((err) => {
-                    reject(err)
-                })
-            })
-        })
+                    reject(err);
+                });
+            });
+        });
 
         return retValue;
     }
 
+    /**
+     * Function performs a sign in to heladac servers, and returns the necessary
+     * user authorization credentials
+     * @return {Promise}
+     */
     async signIn() {
-        let thisAccountAuthorization = this;
-        debugger
-        return authService.ensureUserManagerInitialized().then(() => {
-            // let userManager = authService.userManager
-            debugger
-            return authService.userManager
-            // .signinSilent((userCred) => {
-            //     debugger
-            // })
-            // .signinSilent(window.location.href)
-            // .signinPopupCallback(window.location.href)
-            // .signinRedirect()
+        const thisAccountAuthorization = this;
+        return authService.ensureUserManagerInitialized().then(() => authService.userManager
             .signinSilent()
-            .then((user) => {
-                debugger
-                return thisAccountAuthorization.saveCredentials(user)
-            })
-            .catch((userCred) =>{
-                debugger
-                return authService.userManager.signinPopup()
-                .then((userCred) => {
-                    debugger
-                })
-                .catch((errResponse) => {
-                    debugger
-                })
-            })
-            
-        })
+            .then((user) => thisAccountAuthorization.saveCredentials(user))
+            .catch(() => authService.userManager.signinPopup()));
     }
 }
-const accountAuthorization = new AccountAuthorization()
+const accountAuthorization = new AccountAuthorization();
 export default accountAuthorization;

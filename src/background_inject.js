@@ -2,21 +2,15 @@ function generateHeladacCredentialButton() {
 
 }
 
-
 function main() {
-    generateHeladacCredentialButton()
-    let emailInputs =  document.querySelectorAll('input[type="email"] ');
-    for(let i=0; i < emailInputs.length; i++){
-        let emailInput = emailInputs[i];
-        
+    generateHeladacCredentialButton();
+    const emailInputs = document.querySelectorAll('input[type="email"] ');
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < emailInputs.length; i++) {
+        // const emailInput = emailInputs[i];
     }
 }
 
-main()
-
-
-
-
+main();
 
 console.log('WE back again');
-
