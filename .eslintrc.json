@@ -7,7 +7,8 @@
         "react/react-in-jsx-scope": "off",
         "react/destructuring-assignment": "off",
         "no-nested-ternary": "warn",
-        "react/prop-types": "warn"
+        "react/prop-types": "warn",
+        "linebreak-style": ["error", "windows"]
     },
     "globals": {
         "window": true,

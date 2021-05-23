@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
 import 'idempotent-babel-polyfill';
 import { UserManager, WebStorageStateStore } from 'oidc-client';
 import { ApplicationPaths, ApplicationName } from './ApiAuthorizationConstants';

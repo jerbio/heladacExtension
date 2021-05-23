@@ -40,13 +40,14 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "eslint-config-airbnb": "^18.2.1",
     "idempotent-babel-polyfill": "^7.4.4",
+    "jquery": "^3.6.0",
     "oidc-client": "^1.10.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
-    "babel-polyfill": "^6.26.0",
     "webpack": "^5.4.0",
     "webpack-dev-server": "^3.11.0"
   }

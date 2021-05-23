@@ -10,12 +10,11 @@ class AccountAuthorization {
      */
     // eslint-disable-next-line class-methods-use-this
     isCredentialValid(credentials) {
-        
-        let retValue = (credentials || false)
-        if(retValue) {
-            let expireTimeMs = credentials.expires_at*1000
-            let currentTime = Date.now()
-            retValue = currentTime < expireTimeMs
+        let retValue = (credentials || false);
+        if (retValue) {
+            const expireTimeMs = credentials.expires_at * 1000;
+            const currentTime = Date.now();
+            retValue = currentTime < expireTimeMs;
         }
 
         return retValue;
@@ -35,19 +34,18 @@ class AccountAuthorization {
         return retValue;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     async clearCredentials() {
-        let retValue = new Promise((resolve, reject) => {
-            chrome.storage.sync.set({'loginAuthentication': null}, (result) => {
-                
-                try{
-                    resolve(result)
-                } 
-                catch(err) {
-                    reject(err)
+        const retValue = new Promise((resolve, reject) => {
+            chrome.storage.sync.set({ loginAuthentication: null }, (result) => {
+                try {
+                    resolve(result);
+                } catch (err) {
+                    reject(err);
                 }
-              })
-        })
-        return retValue
+            });
+        });
+        return retValue;
     }
 
     /**
