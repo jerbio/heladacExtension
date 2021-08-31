@@ -29,6 +29,12 @@ class InputFieldManager {
     set value(value) {
         this.inputValue = value;
         this.inputDom.value = this.inputValue;
+        const inputField = this.inputDom;
+        inputField.setAttribute('value', 'My default value');
+        // eslint-disable-next-line no-undef
+        inputField.dispatchEvent(new Event('change', { bubbles: true }));
+        // eslint-disable-next-line no-undef
+        inputField.dispatchEvent(new Event('blur', { bubbles: true }));
     }
 
     get value() {

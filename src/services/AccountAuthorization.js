@@ -115,8 +115,9 @@ class AccountAuthorization {
         const thisAccountAuthorization = this;
         return authService.ensureUserManagerInitialized().then(() => authService.userManager
             .signinSilent()
-            .then((user) => thisAccountAuthorization.saveCredentials(user))
-            .catch(() => authService.userManager.signinPopup()));
+            .then((user) => thisAccountAuthorization.saveCredentials(user)),
+            // .catch(() => authService.userManager.signinPopup())
+            );
     }
 }
 const accountAuthorization = new AccountAuthorization();

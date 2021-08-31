@@ -51,35 +51,31 @@ class HeladacDialog {
                 const { pageManager } = this;
                 const { credential } = this;
                 if (pageManager && credential) {
-                    if (pageManager.lastNameInput) {
-                        pageManager.lastNameInput.inputDom.focus();
-                        pageManager.lastNameInput.inputDom.value = credential.lastName;
-                        $(pageManager.lastNameInput.inputDom).val(credential.lastName);
+                    if (pageManager.lastNameInput && pageManager.lastNameInput.size > 0) {
+                        pageManager.lastNameInput.forEach((lastNameInput) => {
+                            lastNameInput.value = credential.lastName;
+                        });
                     }
-                    if (pageManager.firstNameInput) {
-                        pageManager.firstNameInput.inputDom.focus();
-                        pageManager.firstNameInput.inputDom.value = credential.firstName;
-                        $(pageManager.firstNameInput.inputDom).val(credential.firstName);
+                    if (pageManager.firstNameInput && pageManager.firstNameInput.size > 0) {
+                        pageManager.firstNameInput.forEach((firstNameInput) => {
+                            firstNameInput.value = credential.firstName;
+                        });
                     }
-                    if (pageManager.passwordInput) {
-                        pageManager.passwordInput.inputDom.focus();
-                        pageManager.passwordInput.inputDom.value = credential.decryptedPasssword;
+                    if (pageManager.passwordInput && pageManager.passwordInput.size > 0) {
+                        pageManager.passwordInput.forEach((passwordInput) => {
+                            passwordInput.value = credential.decryptedPasssword;
+                        });
                     }
-                    if (pageManager.confirmPasswordInput) {
-                        pageManager.confirmPasswordInput.inputDom.focus();
-                        utility.sendInputKeyPress(
-                            pageManager.confirmPasswordInput.inputDom,
-                            credential.decryptedPasssword,
-                        );
-                        pageManager
-                            .confirmPasswordInput.inputDom.value = credential.decryptedPasssword;
+                    if (pageManager.confirmPasswordInput
+                        && pageManager.confirmPasswordInput.size > 0) {
+                        pageManager.confirmPasswordInput.forEach((confirmPasswordInput) => {
+                            confirmPasswordInput.value = credential.decryptedPasssword;
+                        });
                     }
-                    if (pageManager.emailInput) {
-                        pageManager.emailInput.inputDom.focus();
-                        utility.sendInputKeyPress(
-                            pageManager.emailInput.inputDom, credential.email,
-                        );
-                        pageManager.emailInput.inputDom.value = credential.email;
+                    if (pageManager.emailInput && pageManager.emailInput.size > 0) {
+                        pageManager.emailInput.forEach((emailInput) => {
+                            emailInput.value = credential.email;
+                        });
                     }
                 }
             });

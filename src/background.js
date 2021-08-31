@@ -13,6 +13,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                     file:
                     './main.css',
                 }, () => {
+                    debugger
                     chrome.tabs.executeScript(tabId, {
                         file:
                     './heladacPageManager.bundle.js',

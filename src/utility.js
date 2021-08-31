@@ -114,6 +114,7 @@ class Utility {
     }
 
     getPasswordDoms() {
+        debugger
         const retValue = [];
         document.querySelectorAll('input[type="password"]').forEach((item) => { retValue.push(item); });
         document.querySelectorAll('input[type="Password"]').forEach((item) => { retValue.push(item); });
