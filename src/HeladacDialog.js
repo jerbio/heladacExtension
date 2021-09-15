@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import utility from './utility';
 import CredentialApi from './services/CredentialApi';
 
@@ -8,13 +7,16 @@ class HeladacDialog {
     #pageManager = null;
 
     constructor(pageManager) {
-        this.UiDialogDom = utility.getDomDrCreateNew('heladacDialog').dom;
-        this.credentialApi = new CredentialApi();
-        this.#credential = null;
-        if (pageManager) {
-            this.#pageManager = pageManager;
+        const genereatedHeladacDom = HeladacDialog.getHeladacContainer();
+        if (genereatedHeladacDom.isNew) {
+            this.UiDialogDom = genereatedHeladacDom.dom;
+            this.credentialApi = new CredentialApi();
+            this.#credential = null;
+            if (pageManager) {
+                this.#pageManager = pageManager;
+            }
+            this.initialize();
         }
-        this.initialize();
     }
 
     get pageManager() {
@@ -106,6 +108,7 @@ class HeladacDialog {
     }
 
     initialize() {
+        this.enlistDialog();
         this.usernameInput = utility.getDomDrCreateNew(`usernameInput${utility.generateUUID()}`, 'input').dom;
         this.usernameInput.setAttribute('placeholder', 'username');
         const usernameContainer = utility.getDomDrCreateNew(`usernameContainer${utility.generateUUID()}`).dom;
@@ -172,6 +175,40 @@ class HeladacDialog {
             document.body.appendChild(this.UiDialogDom);
             this.bindCredentials();
         }
+    }
+
+    closeDialog() {
+        if (this.UiDialogDom.parentNode) {
+            this.UiDialogDom.parentNode.removeChild(this.UiDialogDom);
+        }
+    }
+
+    enlistDialog() {
+        if (!HeladacDialog.dialogs) {
+            HeladacDialog.dialogs = new Set();
+        }
+        HeladacDialog.dialogs.add(this);
+    }
+
+    static closeAllDialogs() {
+        if (!HeladacDialog.dialogs) {
+            HeladacDialog.dialogs = new Set();
+        }
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const dialog of HeladacDialog.dialogs) {
+            dialog.closeDialog();
+        }
+
+        const heladacDom = HeladacDialog.getHeladacContainer().dom;
+        if (heladacDom.parentNode) {
+            heladacDom.parentNode.removeChild(heladacDom);
+        }
+    }
+
+    static getHeladacContainer() {
+        const retValue = utility.getDomDrCreateNew('heladacDialog');
+        return retValue;
     }
 }
 

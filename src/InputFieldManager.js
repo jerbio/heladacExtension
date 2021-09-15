@@ -15,7 +15,11 @@ class InputFieldManager {
             throw Error('need to provide dom for entry');
         }
         this.inputValue = this.inputDom.value;
-        this.initialize();
+        if (!InputFieldManager.isInputFieldAlreadyEnlisted(this.inputDom)) {
+            this.initialize();
+        } else {
+            this.#heladacButton = null;
+        }
     }
 
     get id() {
@@ -42,6 +46,7 @@ class InputFieldManager {
     }
 
     initialize() {
+        this.enlistInputFields();
         this.inputDom.addEventListener('change', this.onInputChange.bind(this));
         this.positionHeladacButton();
     }
@@ -53,6 +58,22 @@ class InputFieldManager {
 
     onInputChange(e) {
         this.inputValue = e.target.value;
+    }
+
+    enlistInputFields() {
+        if (!InputFieldManager.inputFields) {
+            InputFieldManager.inputFields = new Set();
+        }
+        InputFieldManager.inputFields.add(this.inputDom);
+    }
+
+    static isInputFieldAlreadyEnlisted(input) {
+        if (!InputFieldManager.inputFields) {
+            InputFieldManager.inputFields = new Set();
+            return false;
+        }
+        const retValue = InputFieldManager.inputFields.has(input);
+        return retValue;
     }
 }
 

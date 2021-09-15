@@ -79,38 +79,50 @@ class PageManager {
         } = doms;
         if (firstNameDom && Array.isArray(firstNameDom)) {
             new Set(firstNameDom).forEach((eachFirstNameDom) => {
-                const inputField = new InputFieldManager({ inputDom: eachFirstNameDom });
-                this.firstNameInput.add(inputField);
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachFirstNameDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachFirstNameDom });
+                    this.firstNameInput.add(inputField);
+                }
             });
         }
         if (emailDom && Array.isArray(emailDom)) {
             new Set(emailDom).forEach((eachEmailDom) => {
-                const inputField = new InputFieldManager({ inputDom: eachEmailDom });
-                this.emailInput.add(inputField);
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachEmailDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachEmailDom });
+                    this.emailInput.add(inputField);
+                }
             });
         }
         if (passwordDom && Array.isArray(passwordDom)) {
             new Set(passwordDom).forEach((eachPasswordDom) => {
-                const inputField = new InputFieldManager({ inputDom: eachPasswordDom });
-                this.passwordInput.add(inputField);
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachPasswordDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachPasswordDom });
+                    this.passwordInput.add(inputField);
+                }
             });
         }
         if (confirmPasswordDom && Array.isArray(confirmPasswordDom)) {
             new Set(confirmPasswordDom).forEach((eachConfirmPasswordDom) => {
-                const inputField = new InputFieldManager({ inputDom: eachConfirmPasswordDom });
-                this.confirmPasswordInput.add(inputField);
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachConfirmPasswordDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachConfirmPasswordDom });
+                    this.confirmPasswordInput.add(inputField);
+                }
             });
         }
         if (lastNameDom && Array.isArray(lastNameDom)) {
             new Set(lastNameDom).forEach((eachLastNameDom) => {
-                const inputField = new InputFieldManager({ inputDom: eachLastNameDom });
-                this.lastNameInput.add(inputField);
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachLastNameDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachLastNameDom });
+                    this.lastNameInput.add(inputField);
+                }
             });
         }
         if (usernameDom && Array.isArray(usernameDom)) {
             new Set(usernameDom).forEach((eachUsernameDom) => {
-                const inputField = new InputFieldManager({ inputDom: eachUsernameDom });
-                this.usernameInput.add(inputField);
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachUsernameDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachUsernameDom });
+                    this.usernameInput.add(inputField);
+                }
             });
         }
 
@@ -160,16 +172,22 @@ function main() {
     const allHeladacInputs = [].concat(usernameInputs).concat(emailInputs).concat(passwordInputs)
         .concat(firstNameInputs)
         .concat(lastNameInputs);
+
+    HeladacDialog.closeAllDialogs();
     if (allHeladacInputs.length > 0) {
-        const pageManager = new PageManager(
-            {
-                emailDom: emailInputs.length > 0 ? emailInputs : null,
-                passwordDom: passwordInputs.length > 0 ? passwordInputs : null,
-                firstNameDom: firstNameInputs.length > 0 ? firstNameInputs : null,
-                lastNameDom: lastNameInputs.length > 0 ? lastNameInputs : null,
-            },
-        );
-        pageManager.initialize();
+        const isAlreadyEnliseted = allHeladacInputs
+            .some((input) => InputFieldManager.isInputFieldAlreadyEnlisted(input));
+        if (!isAlreadyEnliseted) {
+            const pageManager = new PageManager(
+                {
+                    emailDom: emailInputs.length > 0 ? emailInputs : null,
+                    passwordDom: passwordInputs.length > 0 ? passwordInputs : null,
+                    firstNameDom: firstNameInputs.length > 0 ? firstNameInputs : null,
+                    lastNameDom: lastNameInputs.length > 0 ? lastNameInputs : null,
+                },
+            );
+            pageManager.initialize();
+        }
     } else if (emailInputs.length > 0) {
         const pageManager = new PageManager({ emailDom: emailInputs });
         pageManager.initialize();
