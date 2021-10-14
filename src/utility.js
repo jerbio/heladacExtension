@@ -4,6 +4,21 @@
 class Utility {
     #callBackFunctions = {};
 
+    #inputSelector = {
+        firstName: ['input[name="firstName"]', 'input[name="firstname"]'].join(','),
+        lastName: ['input[name="lastName"]', 'input[name="lastname"]'].join(','),
+        email: ['input[type="email"]', 'input[name="email"]'].join(','),
+        password: ['input[type="password"]', 'input[type="Password"]'].join(','),
+        confirmPassword: ['input[type="ConfirmPasswd"]'].join(','),
+        creditCardNumber: ['input[type="creditCardNumber"]', 'input[name="creditCardNumber"]'].join(','),
+        expiry: ['input[type="creditExpirationMonth"]', 'input[name="creditExpirationMonth"]'].join(','),
+        expiryMonth: ['input[type="creditExpirationMonth"]', 'input[name="creditExpirationMonth"]'].join(','),
+        expiryYear: ['input[type="creditExpirationMonth"]', 'input[name="creditExpirationMonth"]'].join(','),
+        securityCode: ['input[type="creditCardSecurityCode"]', 'input[name="creditCardSecurityCode"]'].join(','),
+        postalCode: ['input[type="creditZipcode"]', 'input[name="creditZipcode"]'].join(','),
+        username: ['input[type="username"]', 'input[name="username"]'].join(','),
+    }
+
     sendInputKeyPress(inputDom, word) {
         if (inputDom) {
             inputDom.focus();
@@ -94,37 +109,71 @@ class Utility {
 
     getfirstNameDoms() {
         const retValue = [];
-        document.querySelectorAll('input[name="firstName"]').forEach((item) => { retValue.push(item); });
-        document.querySelectorAll('input[name="firstname"]').forEach((item) => { retValue.push(item); });
+        document.querySelectorAll(this.#inputSelector.firstName)
+            .forEach((item) => { retValue.push(item); });
         return retValue;
     }
 
     getLastNameDoms() {
         const retValue = [];
-        document.querySelectorAll('input[name="lastName"]').forEach((item) => { retValue.push(item); });
-        document.querySelectorAll('input[name="lastname"]').forEach((item) => { retValue.push(item); });
+        document.querySelectorAll(this.#inputSelector.lastName)
+            .forEach((item) => { retValue.push(item); });
         return retValue;
     }
 
     getEmailDoms() {
         const retValue = [];
-        document.querySelectorAll('input[type="email"]').forEach((item) => { retValue.push(item); });
-        document.querySelectorAll('input[name="email"]').forEach((item) => { retValue.push(item); });
+        document.querySelectorAll(this.#inputSelector.email)
+            .forEach((item) => { retValue.push(item); });
+        return retValue;
+    }
+
+    getCreditCardDoms() {
+        const retValue = [];
+        document.querySelectorAll(this.#inputSelector.creditCardNumber)
+            .forEach((item) => { retValue.push(item); });
+        return retValue;
+    }
+
+    getExpiryDoms() {
+        const retValue = [];
+        document.querySelectorAll(this.#inputSelector.expiry)
+            .forEach((item) => { retValue.push(item); });
+        return retValue;
+    }
+
+    getSecurityCodeDoms() {
+        const retValue = [];
+        document.querySelectorAll(this.#inputSelector.securityCode)
+            .forEach((item) => { retValue.push(item); });
+        return retValue;
+    }
+
+    getPostalCodeDoms() {
+        const retValue = [];
+        document.querySelectorAll(this.#inputSelector.postalCode)
+            .forEach((item) => { retValue.push(item); });
         return retValue;
     }
 
     getPasswordDoms() {
-        debugger
         const retValue = [];
-        document.querySelectorAll('input[type="password"]').forEach((item) => { retValue.push(item); });
-        document.querySelectorAll('input[type="Password"]').forEach((item) => { retValue.push(item); });
+        document.querySelectorAll(this.#inputSelector.password)
+            .forEach((item) => { retValue.push(item); });
+        return retValue;
+    }
+
+    getConfirmPasswordDoms() {
+        const retValue = [];
+        document.querySelectorAll(this.#inputSelector.confirmPassword)
+            .forEach((item) => { retValue.push(item); });
         return retValue;
     }
 
     getUsernameDoms() {
         const retValue = [];
-        document.querySelectorAll('input[type="username"]').forEach((item) => { retValue.push(item); });
-        document.querySelectorAll('input[name="username"]').forEach((item) => { retValue.push(item); });
+        document.querySelectorAll(this.#inputSelector.username)
+            .forEach((item) => { retValue.push(item); });
         return retValue;
     }
 

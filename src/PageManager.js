@@ -7,6 +7,7 @@ class PageManager {
     constructor(params) {
         const {
             emailDom, usernameDom, passwordDom, confirmPasswordDom, firstNameDom, lastNameDom,
+            creditCardDom, postalCodeDom, securityCodeDom, expirationDom,
         } = params;
         this.credential = null;
         this.credentialApi = new CredentialApi();
@@ -16,9 +17,22 @@ class PageManager {
         this.firstNameInput = new Set();
         this.usernameInput = new Set();
         this.lastNameInput = new Set();
+        this.creditCardInput = new Set();
+        this.postalCodeInput = new Set();
+        this.securityCodeInput = new Set();
+        this.expirationInput = new Set();
 
         this.populateInputs({
-            emailDom, usernameDom, passwordDom, confirmPasswordDom, firstNameDom, lastNameDom,
+            emailDom,
+            usernameDom,
+            passwordDom,
+            confirmPasswordDom,
+            firstNameDom,
+            lastNameDom,
+            creditCardDom,
+            postalCodeDom,
+            securityCodeDom,
+            expirationDom,
         });
         this.bindPageChanges();
     }
@@ -52,18 +66,28 @@ class PageManager {
 
             if (newInputFound) {
                 // eslint-disable-next-line max-len
-                observer.disconnect();// TODO: WE need to deal with pages which do an unnecessary body reload e.g facebook.com, the clicking "create new Account"
+                observer.disconnect();// TODO: WE need to deal with pages which do DOM reloads reload e.g facebook.com, the clicking "create new Account"
                 const usernameInputs = utility.getUsernameDoms();
                 const emailInputs = utility.getEmailDoms();
                 const passwordInputs = utility.getPasswordDoms();
                 const firstNameInputs = utility.getfirstNameDoms();
                 const lastNameInputs = utility.getLastNameDoms();
+                const creditCardInputs = utility.getCreditCardDoms();
+                const confirmPasswordInputs = utility.getConfirmPasswordDoms();
+                const postalCodeInputs = utility.getPostalCodeDoms();
+                const creditCardSecurityCodeInputs = utility.getSecurityCodeDoms();
+                const expiryInputs = utility.getExpiryDoms();
                 this.populateInputs({
                     emailDom: emailInputs,
                     usernameDom: usernameInputs,
                     passwordDom: passwordInputs,
+                    confirmPasswordDom: confirmPasswordInputs,
                     firstNameDom: firstNameInputs,
                     lastNameDom: lastNameInputs,
+                    creditCardDom: creditCardInputs,
+                    postalCodeDom: postalCodeInputs,
+                    securityCodeDom: creditCardSecurityCodeInputs,
+                    expirationDom: expiryInputs,
                 });
             }
         }
@@ -76,6 +100,7 @@ class PageManager {
     populateInputs(doms) {
         const {
             emailDom, usernameDom, passwordDom, confirmPasswordDom, firstNameDom, lastNameDom,
+            creditCardDom, postalCodeDom, securityCodeDom, expirationDom,
         } = doms;
         if (firstNameDom && Array.isArray(firstNameDom)) {
             new Set(firstNameDom).forEach((eachFirstNameDom) => {
@@ -125,17 +150,55 @@ class PageManager {
                 }
             });
         }
-
-        this.heladacButtons = [...new Set([]
+        if (creditCardDom && Array.isArray(creditCardDom)) {
+            new Set(creditCardDom).forEach((eachCreditCardDom) => {
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachCreditCardDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachCreditCardDom });
+                    this.creditCardInput.add(inputField);
+                }
+            });
+        }
+        if (postalCodeDom && Array.isArray(postalCodeDom)) {
+            new Set(postalCodeDom).forEach((eachPostalCodeDom) => {
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachPostalCodeDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachPostalCodeDom });
+                    this.postalCodeInput.add(inputField);
+                }
+            });
+        }
+        if (securityCodeDom && Array.isArray(securityCodeDom)) {
+            new Set(securityCodeDom).forEach((eachSecurityCodeDom) => {
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachSecurityCodeDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachSecurityCodeDom });
+                    this.securityCodeInput.add(inputField);
+                }
+            });
+        }
+        if (expirationDom && Array.isArray(expirationDom)) {
+            new Set(expirationDom).forEach((eachExpirationDom) => {
+                if (!InputFieldManager.isInputFieldAlreadyEnlisted(eachExpirationDom)) {
+                    const inputField = new InputFieldManager({ inputDom: eachExpirationDom });
+                    this.expirationInput.add(inputField);
+                }
+            });
+        }
+        const pageInputs = [...new Set([]
             .concat(...this.emailInput)
             .concat(...this.passwordInput)
             .concat(...this.confirmPasswordInput)
             .concat(...this.firstNameInput)
             .concat(...this.lastNameInput)
-            .concat(...this.usernameInput))]
-            .filter((inputButton) => inputButton != null)
+            .concat(...this.usernameInput)
+            .concat(...this.creditCardInput)
+            .concat(...this.postalCodeInput)
+            .concat(...this.securityCodeInput)
+            .concat(...this.expirationInput))].filter((inputButton) => inputButton != null);
+        this.heladacButtons = pageInputs
             .map((inputButton) => inputButton.heladacButton.heladacDom);
         this.heladacDialog = new HeladacDialog(this);
+        pageInputs.forEach((pageInput) => {
+            pageInput.inputDom.addEventListener('focus', () => { this.heladacDialog.setHeladacAsStillVisible(); });
+        });
     }
 
     bindClickOfHeladacButton(heladacButton) {
@@ -169,9 +232,19 @@ function main() {
     const passwordInputs = utility.getPasswordDoms();
     const firstNameInputs = utility.getfirstNameDoms();
     const lastNameInputs = utility.getLastNameDoms();
+    const creditCardInputs = utility.getCreditCardDoms();
+    const confirmPasswordInputs = utility.getConfirmPasswordDoms();
+    const postalCodeInputs = utility.getPostalCodeDoms();
+    const securityCodeInputs = utility.getSecurityCodeDoms();
+    const expiryInputs = utility.getExpiryDoms();
     const allHeladacInputs = [].concat(usernameInputs).concat(emailInputs).concat(passwordInputs)
         .concat(firstNameInputs)
-        .concat(lastNameInputs);
+        .concat(lastNameInputs)
+        .concat(creditCardInputs)
+        .concat(confirmPasswordInputs)
+        .concat(postalCodeInputs)
+        .concat(securityCodeInputs)
+        .concat(expiryInputs);
 
     HeladacDialog.closeAllDialogs();
     if (allHeladacInputs.length > 0) {
@@ -181,9 +254,16 @@ function main() {
             const pageManager = new PageManager(
                 {
                     emailDom: emailInputs.length > 0 ? emailInputs : null,
+                    usernameDom: usernameInputs.length > 0 ? usernameInputs : null,
                     passwordDom: passwordInputs.length > 0 ? passwordInputs : null,
+                    confirmPasswordDom: confirmPasswordInputs.length > 0
+                        ? confirmPasswordInputs : null,
                     firstNameDom: firstNameInputs.length > 0 ? firstNameInputs : null,
                     lastNameDom: lastNameInputs.length > 0 ? lastNameInputs : null,
+                    creditCardDom: creditCardInputs.length > 0 ? creditCardInputs : null,
+                    postalCodeDom: postalCodeInputs.length > 0 ? postalCodeInputs : null,
+                    securityCodeDom: securityCodeInputs.length > 0 ? securityCodeInputs : null,
+                    expirationDom: expiryInputs.length > 0 ? expiryInputs : null,
                 },
             );
             pageManager.initialize();
@@ -193,7 +273,9 @@ function main() {
         pageManager.initialize();
     }
 }
-debugger
-main();
+
+setTimeout(() => {
+    main();
+}, 1000);
 
 console.log('Background injected back again');
